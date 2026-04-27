@@ -19,6 +19,10 @@
           El QR aparecerá aquí
         </div>
       </div>
+      <div class="export-buttons">
+        <button class="btn btn-secondary" @click="exportQRPNG">Exportar PNG</button>
+        <button class="btn btn-secondary" @click="exportQRSVG">Exportar SVG</button>
+      </div>
     </div>
     
     <div class="options-section">
@@ -94,9 +98,34 @@ onMounted(() => {
   generateQR()
 })
 
+const exportQRPNG = () => {
+  const link = document.createElement('a')
+  link.download = 'qr-code.png'
+  link.href = qrCanvas.value.toDataURL('image/png')
+  link.click()
+}
+
+const exportQRSVG = async () => {
+  const svg = await QRCode.toString(text.value, {
+    type: 'svg',
+    width: size.value,
+    margin: 2,
+    color: { dark: color.value, light: backgroundColor.value },
+    errorCorrectionLevel: errorCorrectionLevel.value
+  })
+  const blob = new Blob([svg], { type: 'image/svg+xml' })
+  const link = document.createElement('a')
+  link.download = 'qr-code.svg'
+  link.href = URL.createObjectURL(blob)
+  link.click()
+  URL.revokeObjectURL(link.href)
+}
+
+const getQRText = () => text.value
+
 defineExpose({
   getCanvas: () => qrCanvas.value,
-  getText: () => text.value
+  getText: getQRText
 })
 </script>
 
@@ -180,5 +209,11 @@ defineExpose({
   height: 40px;
   padding: 2px;
   cursor: pointer;
+}
+
+.export-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 </style>

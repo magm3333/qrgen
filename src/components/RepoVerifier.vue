@@ -1,21 +1,4 @@
 <template>
-  <div class="repo-verifier">
-    <div v-if="loading" class="loading">
-      <div class="spinner"></div>
-      <span>Verificando repositorio...</span>
-    </div>
-    <div v-else-if="error" class="error">
-      <span class="error-icon">⚠️</span>
-      <span>{{ error }}</span>
-    </div>
-    <div v-else-if="repoExists" class="success">
-      <span class="success-icon">✓</span>
-      <span>¡He creado el repo <strong>{{ repoName }}</strong>!</span>
-    </div>
-    <div v-else class="not-found">
-      <span>El repo {{ repoName }} no está disponible</span>
-    </div>
-  </div>
 </template>
 
 <script setup>
